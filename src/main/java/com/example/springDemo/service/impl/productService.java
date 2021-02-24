@@ -20,19 +20,19 @@ public class productService  implements productInterface {
     @Override
     public productResponseDto searchProducts(productRequestDto productRequestDTO) {
         Map<String,Object> productResponse = searchClient.getProducts(productRequestDTO.getSearchTerm());
-        List<Map<String,Object>> products=(List<Map<String,Object>>)((Map<String,Object>) productResponse.get("response")).get("docs");
+        List<Map<String,Object>> products=(List<Map<String,Object>>)((Map<String,Object>)productResponse.get("response")).get("docs");
         ArrayList<productDto> list=new ArrayList<>();
         for(Map<String,Object> product: products){
             productDto productDto=new productDto();
             productDto.setDescription((String)product.get("description"));
             productDto.setTitle((String)product.get("name"));
-            productDto.setSalePrice(((Double)(product.get("salePrice"))).toString());
-            int stock=(int) product.get("isInStock");
-            if(stock>1){
-                productDto.setInStock(true);
-            } else{
-                productDto.setInStock(false);
-            }
+            //productDto.setSalePrice(((Double)(product.get("salePrice"))).toString());
+//            int stock=(int) product.get("isInStock");
+//            if(stock>1){
+//                productDto.setInStock(true);
+//            } else{
+//                productDto.setInStock(false);
+//            }
             list.add(productDto);
         }
 
@@ -45,8 +45,8 @@ public class productService  implements productInterface {
             productDto productDto=new productDto();
             productDto.setDescription((String)product.get("description"));
             productDto.setTitle((String)product.get("name"));
-            productDto.setSalePrice(((Double)(product.get("salePrice"))).toString());
-            productDto.setLocation(product.get("stockLocation").toString());
+//            productDto.setSalePrice(((Double)(product.get("salePrice"))).toString());
+//            productDto.setLocation(product.get("stockLocation").toString());
             int stock=(int) product.get("isInStock");
             if(stock>1){
                 productDto.setInStock(true);
