@@ -58,4 +58,27 @@ class productServiceTest {
         assertEquals(response.getProductDtoList().size(),10);
         assertEquals(response.getLocationList().size(),10);
     }
+
+    @Test
+    public void testGetProductsExceptionTest() throws IOException{
+        ObjectMapper objectMapper=new ObjectMapper();
+         Map<String,Object> searchTermMockObject=objectMapper.readValue(
+                 new URL("file:src/test/resources/search.mock"),Map.class);
+         Map<String,Object> locationMockObject=objectMapper.readValue(
+                 new URL("file:src/test/resources/location.mock"),Map.class);
+        Mockito.when(searchClient.getProducts("samsung")).thenReturn(searchTermMockObject);
+        Mockito.when(searchClient.getProducts("stockLocation:jakarta")).thenThrow(NullPointerException.class);
+        
+        productRequestDto requestDTO = new productRequestDto();
+        requestDTO.setSearchTerm("samsung");
+        requestDTO.setStockLocation("jakarta");
+        productResponseDto response = searchService.searchProducts(requestDTO);
+
+        assertEquals(response.getProductDtoList().size(),10);       
+        assertEquals(response.getLocationList(),null);
+        
+        Mockito.verify(searchClient).getProducts("samsung");
+        Mockito.verify(searchClient).getProducts("stockLocation:jakarta");
+
+    }
 }
